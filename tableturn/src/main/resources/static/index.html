@@ -1,0 +1,207 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>TableTurn Restaurant</title>
+    <link rel="stylesheet" href="style.css">
+</head>
+<body>
+<header class="topbar">
+    <div>
+        <h1>🍽️ TableTurn</h1>
+        <p>Restaurant Management System</p>
+    </div>
+    <span class="status">● Restaurant Dashboard</span>
+</header>
+
+<main class="container">
+    <section class="welcome">
+        <h2>Welcome to TableTurn!</h2>
+        <p>Manage your tables, reservations, orders, order items and bills in one place.</p>
+        <button onclick="loadAll()">Refresh All Modules</button>
+        <p id="message"></p>
+    </section>
+
+    <section class="module-grid">
+        <article class="module-card">
+            <h2>🪑 Table Management</h2>
+            <p class="hint">Add and manage restaurant tables.</p>
+            <form id="tableForm">
+                <label>Table ID (for update/delete)</label>
+                <input id="tableId" type="number" placeholder="Existing table ID">
+
+                <label>Table Number</label>
+                <input id="tableNumber" placeholder="Example: T01" required>
+
+                <label>Capacity</label>
+                <input id="tableCapacity" type="number" min="1" placeholder="Number of seats" required>
+
+                <label>Status</label>
+                <select id="tableStatus">
+                    <option value="">Choose status</option>
+                    <option value="FREE">FREE</option>
+                    <option value="OCCUPIED">OCCUPIED</option>
+                    <option value="RESERVED">RESERVED</option>
+                </select>
+
+                <div class="buttons">
+                    <button type="submit">Save Table</button>
+                    <button type="button" class="secondary" onclick="updateRecord('tables')">Update</button>
+                    <button type="button" class="danger" onclick="deleteRecord('tables')">Delete</button>
+                </div>
+            </form>
+            <button class="outline" onclick="loadModule('tables')">View Tables</button>
+            <pre id="tablesResult">Click View Tables to load records.</pre>
+        </article>
+
+        <article class="module-card">
+            <h2>📅 Reservations</h2>
+            <p class="hint">Book a table for a customer.</p>
+            <form id="reservationForm">
+                <label>Reservation ID (for update/delete)</label>
+                <input id="reservationId" type="number" placeholder="Existing reservation ID">
+
+                <label>Table ID</label>
+                <input id="reservationTableId" type="number" required>
+
+                <label>Customer Name</label>
+                <input id="customerName" required>
+
+                <label>Party Size</label>
+                <input id="partySize" type="number" min="1" required>
+
+                <label>Start Time</label>
+                <input id="startTime" type="datetime-local" required>
+
+                <label>End Time</label>
+                <input id="endTime" type="datetime-local" required>
+
+                <label>Status</label>
+                <select id="reservationStatus">
+                    <option value="BOOKED">BOOKED</option>
+                    <option value="CANCELLED">CANCELLED</option>
+                </select>
+
+                <div class="buttons">
+                    <button type="submit">Save Reservation</button>
+                    <button type="button" class="secondary" onclick="updateRecord('reservations')">Update</button>
+                    <button type="button" class="danger" onclick="deleteRecord('reservations')">Delete</button>
+                </div>
+            </form>
+            <button class="outline" onclick="loadModule('reservations')">View Reservations</button>
+            <pre id="reservationsResult">Click View Reservations to load records.</pre>
+        </article>
+
+        <article class="module-card">
+            <h2>🛍️ Orders</h2>
+            <p class="hint">Create and manage customer orders.</p>
+            <form id="orderForm">
+                <label>Order ID (for update/delete)</label>
+                <input id="orderId" type="number" placeholder="Existing order ID">
+
+                <label>Reservation ID</label>
+                <input id="orderReservationId" type="number" required>
+
+                <label>Customer Name</label>
+                <input id="orderCustomerName" required>
+
+                <label>Status</label>
+                <select id="orderStatus">
+                    <option value="PLACED">PLACED</option>
+                    <option value="PREPARING">PREPARING</option>
+                    <option value="READY">READY</option>
+                    <option value="SERVED">SERVED</option>
+                    <option value="CANCELLED">CANCELLED</option>
+                </select>
+
+                <label>Total Amount</label>
+                <input id="orderTotalAmount" type="number" min="0" step="0.01" required>
+
+                <div class="buttons">
+                    <button type="submit">Save Order</button>
+                    <button type="button" class="secondary" onclick="updateRecord('orders')">Update</button>
+                    <button type="button" class="danger" onclick="deleteRecord('orders')">Delete</button>
+                </div>
+            </form>
+            <button class="outline" onclick="loadModule('orders')">View Orders</button>
+            <pre id="ordersResult">Click View Orders to load records.</pre>
+        </article>
+
+        <article class="module-card">
+            <h2>🍔 Order Items</h2>
+            <p class="hint">Add food items to an order.</p>
+            <form id="orderItemForm">
+                <label>Order Item ID (for update/delete)</label>
+                <input id="orderItemId" type="number" placeholder="Existing item ID">
+
+                <label>Order ID</label>
+                <input id="itemOrderId" type="number" required>
+
+                <label>Item Name</label>
+                <input id="itemName" placeholder="Example: Chicken Burger" required>
+
+                <label>Quantity</label>
+                <input id="itemQuantity" type="number" min="1" required>
+
+                <label>Unit Price</label>
+                <input id="itemUnitPrice" type="number" min="0" step="0.01" required>
+
+                <div class="buttons">
+                    <button type="submit">Save Item</button>
+                    <button type="button" class="secondary" onclick="updateRecord('orderItems')">Update</button>
+                    <button type="button" class="danger" onclick="deleteRecord('orderItems')">Delete</button>
+                </div>
+            </form>
+            <button class="outline" onclick="loadModule('orderItems')">View Order Items</button>
+            <pre id="orderItemsResult">Click View Order Items to load records.</pre>
+        </article>
+
+        <article class="module-card">
+            <h2>🧾 Bills</h2>
+            <p class="hint">Generate and manage customer bills.</p>
+            <form id="billForm">
+                <label>Bill ID (for update/delete)</label>
+                <input id="billId" type="number" placeholder="Existing bill ID">
+
+                <label>Order ID</label>
+                <input id="billOrderId" type="number" required>
+
+                <label>Tax Percentage</label>
+                <input id="taxPercent" type="number" min="0" step="0.01" value="5" required>
+
+                <label>Discount</label>
+                <input id="discount" type="number" min="0" step="0.01" value="0" required>
+
+                <label>Payment Status</label>
+                <select id="paymentStatus">
+                    <option value="UNPAID">UNPAID</option>
+                    <option value="PAID">PAID</option>
+                </select>
+
+                <label>Payment Method</label>
+                <select id="paymentMethod">
+                    <option value="CASH">CASH</option>
+                    <option value="UPI">UPI</option>
+                    <option value="CARD">CARD</option>
+                </select>
+
+                <div class="buttons">
+                    <button type="submit">Generate Bill</button>
+                    <button type="button" class="secondary" onclick="updateRecord('bills')">Update</button>
+                    <button type="button" class="danger" onclick="deleteRecord('bills')">Delete</button>
+                </div>
+            </form>
+            <button class="outline" onclick="loadModule('bills')">View Bills</button>
+            <pre id="billsResult">Click View Bills to load records.</pre>
+        </article>
+    </section>
+</main>
+
+<footer>
+    <p>TableTurn Restaurant Management System</p>
+</footer>
+
+<script src="script.js"></script>
+</body>
+</html>
